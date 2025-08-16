@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Musubi - Authentic Hawaiian Flavors</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FF8C00, #FFA500, #FF6B35);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(-50px, -50px) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 50px;
+            padding: 15px 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar:hover {
+            background: rgba(0, 0, 0, 0.3);
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        .nav-items {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-item {
+            cursor: pointer;
+            color: #FFFFFF;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 140, 0, 0.3);
+            color: #FF8C00;
+            transform: translateY(-2px);
+        }
+        
+        /* Page containers */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 20px 50px;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Glass container */
+        .glass-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 60px 50px;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Home page styles */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 6rem;
+            color: #FFFFFF;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #FF8C00;
+            font-weight: 300;
+            margin-bottom: 40px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #FF8C00, #FFA500);
+            color: #000;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 140, 0, 0.4);
+        }
+        
+        /* Features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 140, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(255, 140, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+        }
+        
+        .feature-text {
+            color: #CCCCCC;
+            line-height: 1.6;
+        }
+        
+        /* Food menu styles */
+        .menu-items {
+            display: grid;
+            gap: 40px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            border-radius: 25px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .menu-item:hover::before {
+            left: 100%;
+        }
+        
+        .menu-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 140, 0, 0.05);
+            box-shadow: 0 15px 40px rgba(255, 140, 0, 0.2);
+        }
+        
+        .item-image-container {
+            position: relative;
+            margin-right: 40px;
+        }
+        
+        .item-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #FF8C00;
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.3);
+        }
+        
+        .item-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #FF8C00;
+            color: #000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .item-subtitle {
+            font-size: 1rem;
+            color: #FF8C00;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .item-description {
+            list-style: none;
+        }
+        
+        .item-description li {
+            color: #CCCCCC;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .item-description li::before {
+            content: '•';
+            color: #FF8C00;
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+        }
+        
+        .price-section {
+            text-align: right;
+        }
+        
+        .main-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .price-label {
+            font-size: 0.8rem;
+            color: #CCCCCC;
+            text-transform: uppercase;
+        }
+        
+        /* About and Contact styles */
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: #FFFFFF;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+        
+        .section-text {
+            color: #FFFFFF;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            background: rgba(255, 140, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .contact-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: #FF8C00;
+            margin-bottom: 15px;
+        }
+        
+        .contact-card p {
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 20px;
+                top: 10px;
+            }
+            
+            .nav-items {
+                gap: 15px;
+            }
+            
+            .nav-item {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .glass-container {
+                padding: 40px 30px;
+                margin: 10px;
+            }
+            
+            .hero-title {
+                font-size: 4rem;
+            }
+            
+            .menu-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .item-image-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .price-section {
+                text-align: center;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <ul class="nav-items">
+            <li class="nav-item active" onclick="showPage('home')">Home</li>
+            <li class="nav-item" onclick="showPage('foods')">Foods</li>
+            <li class="nav-item" onclick="showPage('about')">About</li>
+            <li class="nav-item" onclick="showPage('contact')">Contact</li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div class="page active" id="home">
+        <div class="glass-container">
+            <div class="hero">
+                <h1 class="hero-title">SPAM MUSUBI</h1>
+                <p class="hero-subtitle">Authentic Hawaiian Flavors, Crafted with Love</p>
+                <button class="cta-button" onclick="showPage('foods')">View Our Menu</button>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍱</div>
+                    <h3 class="feature-title">Fresh Daily</h3>
+                    <p class="feature-text">Made fresh every day with premium ingredients and traditional techniques.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌺</div>
+                    <h3 class="feature-title">Hawaiian Style</h3>
+                    <p class="feature-text">Authentic Hawaiian spam musubi recipes passed down through generations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Quick Service</h3>
+                    <p class="feature-text">Fast preparation without compromising on quality and taste.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Foods Page -->
+    <div class="page" id="foods">
+        <div class="glass-container">
+            <div class="hero">
+                <h1 class="section-title">Our Menu</h1>
+                <p class="hero-subtitle">Delicious Spam Musubi Variations</p>
+            </div>
+            
+            <div class="menu-items">
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="./img/classic.jpeg" alt="Classic Spam Musubi" class="item-image">
+                        <div class="item-number">40</div>
+                    </div>
+                    <div class="item-content">
+                        <h2 class="item-title">Classic</h2>
+                        <h3 class="item-subtitle">Traditional Style</h3>
+                        <ul class="item-description">
+                            <li>Korean Spam</li>
+                            <li>Seasoned Rice</li>
+                            <li>Seaweed Sheets</li>
+                            <li>Sesame Seeds</li>
+                            <li>Special Sauce</li>
+                        </ul>
+                    </div>
+                    <div class="price-section">
+                        <div class="main-price">₱40</div>
+                        <div class="price-label">Per Piece</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="./img/with-egg.jpeg" alt="Spam Musubi with Egg" class="item-image">
+                        <div class="item-number">50</div>
+                    </div>
+                    <div class="item-content">
+                        <h2 class="item-title">With Egg</h2>
+                        <h3 class="item-subtitle">Classic + Egg</h3>
+                        <ul class="item-description">
+                            <li>All classic ingredients</li>
+                            <li>Fresh scrambled egg</li>
+                            <li>Extra protein</li>
+                        </ul>
+                    </div>
+                    <div class="price-section">
+                        <div class="main-price">₱50</div>
+                        <div class="price-label">Per Piece</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="./img/egg-with-cheese.jpeg" alt="Egg with Cheese Musubi" class="item-image">
+                        <div class="item-number">65</div>
+                    </div>
+                    <div class="item-content">
+                        <h2 class="item-title">Egg with Cheese</h2>
+                        <h3 class="item-subtitle">Ultimate Combo</h3>
+                        <ul class="item-description">
+                            <li>Spam & egg base</li>
+                            <li>Melted cheese</li>
+                            <li>Extra indulgent</li>
+                        </ul>
+                    </div>
+                    <div class="price-section">
+                        <div class="main-price">₱65</div>
+                        <div class="price-label">Per Piece</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?w=200&h=200&fit=crop&crop=center" alt="Musubi Rice Bowl" class="item-image">
+                        <div class="item-number">85</div>
+                    </div>
+                    <div class="item-content">
+                        <h2 class="item-title">Musubi Rice Bowl</h2>
+                        <h3 class="item-subtitle">Deconstructed Delight</h3>
+                        <ul class="item-description">
+                            <li>All musubi flavors</li>
+                            <li>Served as rice bowl</li>
+                            <li>Perfect for sharing</li>
+                        </ul>
+                    </div>
+                    <div class="price-section">
+                        <div class="main-price">₱85</div>
+                        <div class="price-label">Full Bowl</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div class="page" id="about">
+        <div class="glass-container">
+            <div class="content-section">
+                <h1 class="section-title">About Us</h1>
+                <p class="section-text">
+                    Welcome to our spam musubi paradise! We're passionate about bringing you the authentic taste of Hawaii 
+                    right here in the Philippines. Our spam musubi is made with love, using traditional Hawaiian recipes 
+                    and the finest ingredients.
+                </p>
+                <p class="section-text">
+                    Each piece is carefully crafted to deliver the perfect balance of flavors - from our specially 
+                    seasoned Korean spam to our perfectly seasoned rice, all wrapped in premium seaweed sheets. 
+                    We believe that great food brings people together, and every bite of our musubi is a taste of aloha.
+                </p>
+                <p class="section-text">
+                    Whether you're trying spam musubi for the first time or you're already a fan, we promise to deliver 
+                    an authentic Hawaiian experience that will keep you coming back for more.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div class="page" id="contact">
+        <div class="glass-container">
+            <div class="content-section">
+                <h1 class="section-title">Contact Us</h1>
+                <p class="section-text">
+                    Ready to taste the best spam musubi in town? Get in touch with us to place your order 
+                    or learn more about our delicious offerings.
+                </p>
+                
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3>📍 Location</h3>
+                        <p>Brgy. Landayan, 28 Purok 1 San Luis Street, San Pedro, Laguna<br>Philippines</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>🕒 Hours</h3>
+                        <p>Daily: 11:00 AM - 9:00 PM<br>Fresh musubi all day!</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>📧 Email</h3>
+                        <p>elliemarcellana248@gmail.com<br></p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>Facebook</h3>
+                        <a href="https://www.facebook.com/aubrey.miles.34614" target="_blank">Ellie Marcellana</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        // Add smooth scrolling and page transitions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Preload images for better performance
+            const images = [
+                'https://images.unsplash.com/photo-1609501676725-7186f3d86f16?w=200&h=200&fit=crop&crop=center',
+                'https://images.unsplash.com/photo-1582042433726-c3e2e5c78088?w=200&h=200&fit=crop&crop=center',
+                'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200&h=200&fit=crop&crop=center',
+                'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=200&h=200&fit=crop&crop=center'
+            ];
+            
+            images.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        });
+    </script>
+</body>
+</html>
